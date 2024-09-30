@@ -1,0 +1,43 @@
+{
+
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "CartServiceApplication",
+            "request": "launch",
+            "mainClass": "csci318.cart_service.CartServiceApplication",
+            "projectName": "cart-service"
+        },
+        {
+            "type": "java",
+            "name": "ProductServiceApplication",
+            "request": "launch",
+            "mainClass": "csci318.product_service.ProductServiceApplication",
+            "projectName": "product-service"
+        },
+        {
+            "type": "java",
+            "name": "UserApplication",
+            "request": "launch",
+            "mainClass": "csci318.demo.UserApplication",
+            "projectName": "user-service"
+        },
+    ],
+    "compounds": [
+        {
+            "name": "Run All Services",
+            "configurations": [
+                "CartServiceApplication",
+                "ProductServiceApplication",
+                "UserApplication"
+            ]
+        }
+    ]
+}
