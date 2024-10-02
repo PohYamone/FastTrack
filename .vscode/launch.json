@@ -29,6 +29,41 @@
             "mainClass": "csci318.demo.UserApplication",
             "projectName": "user-service"
         },
+        {
+            "type": "java",
+            "name": "InventoryServiceApplication",
+            "request": "launch",
+            "mainClass": "csci318.inventory-service.InventoryServiceApplication",
+            "projectName": "inventory-service"
+        },
+        {
+            "type": "java",
+            "name": "NotificationServiceApplication",
+            "request": "launch",
+            "mainClass": "csci318.notification-service.NotificationServiceApplication",
+            "projectName": "notification-service"
+        },
+        {
+            "type": "java",
+            "name": "OrderServiceApplication",
+            "request": "launch",
+            "mainClass": "csci318.order-service.OrderServiceApplication",
+            "projectName": "order-service"
+        },
+        {
+            "type": "java",
+            "name": "PaymentServiceApplication",
+            "request": "launch",
+            "mainClass": "csci318.payment-service.PaymentServiceApplication",
+            "projectName": "payment-service"
+        },
+        {
+            "type": "java",
+            "name": "ShippingServiceApplication",
+            "request": "launch",
+            "mainClass": "csci318.shipping-service.ShippingServiceApplication",
+            "projectName": "shipping-service"
+        },
     ],
     "compounds": [
         {
@@ -36,7 +71,12 @@
             "configurations": [
                 "CartServiceApplication",
                 "ProductServiceApplication",
-                "UserApplication"
+                "UserApplication",
+                "InventoryServiceApplication",
+                "NotificationServiceApplication",
+                "OrderServiceApplication",
+                "PaymentServiceApplication",
+                "ShippingServiceApplication"
             ]
         }
     ]
