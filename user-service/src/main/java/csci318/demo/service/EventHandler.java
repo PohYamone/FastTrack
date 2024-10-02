@@ -1,5 +1,7 @@
 package csci318.demo.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +12,9 @@ import csci318.demo.repository.CustomerEventRepository;
 public class EventHandler {
 
     private final CustomerEventRepository customerEventRepository;
+
+    @Autowired
+    private StreamBridge streamBridge;
 
     public EventHandler(CustomerEventRepository customerEventRepository) {
         this.customerEventRepository = customerEventRepository;
@@ -57,6 +62,7 @@ public class EventHandler {
 
         System.out.println("User registered with ID: " + userEvent.getCustomerId());
         customerEventRepository.save(userEvent);
+        streamBridge.send("user-register-out-0", userEvent);
       
     }
 

@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,6 +17,7 @@ import csci318.cart_service.controller.DTO.CartItemDTO;
 import csci318.cart_service.model.Cart;
 import csci318.cart_service.model.CartItems;
 import csci318.cart_service.model.event.CartEvent;
+import csci318.cart_service.model.event.UserEvent;
 import csci318.cart_service.repository.CartRepository;
 import csci318.cart_service.controller.DTO.ProductDTO;
 
@@ -33,6 +36,13 @@ public class CartService {
     }
     
 
+    @Bean
+    public Consumer<UserEvent> userRegisterConsumer() {
+        return userEvent -> {
+            System.out.println("Received UserRegistered event for user ID: " + userEvent.getCustomerId());
+            createCartForCustomer(userEvent.getCustomerId());
+        };
+    }
 
     /**
      * Creates a new cart for a specific customer.
