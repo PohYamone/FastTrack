@@ -1,12 +1,14 @@
-package csci318.notification_service;
+package csci318.notification_service.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import csci318.notification_service.Model.NotificationService;
+
 
 @RestController
-@RequestMapping("/notifications")
+@RequestMapping("/api/notifications")
 public class NotificationController {
 
     private final NotificationService notificationService;
@@ -23,3 +25,4 @@ public class NotificationController {
         notificationService.sendOrderNotification(orderId, userEmail);
         return ResponseEntity.ok().build();
     }
+}

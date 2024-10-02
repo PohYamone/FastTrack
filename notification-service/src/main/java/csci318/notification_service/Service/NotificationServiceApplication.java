@@ -1,4 +1,4 @@
-package csci318.notification_service;
+package csci318.notification_service.Service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package csci318.notification_service;
+package csci318.notification_service.Model;
 
 import org.springframework.stereotype.Service;
 
