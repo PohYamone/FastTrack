@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 
 import csci318.product_service.model.Product;
 import csci318.product_service.repository.ProductRepository;
+import csci318.product_service.service.ProductService;
 
 @SpringBootApplication
 public class ProductServiceApplication {
@@ -16,7 +17,7 @@ public class ProductServiceApplication {
 
 
 	@Bean
-	public CommandLineRunner loadDatabase(ProductRepository productRepository) throws Exception {
+	public CommandLineRunner loadDatabase(ProductRepository productRepository, ProductService productService) throws Exception {
 		return args -> {
 
 			// Example object 1
@@ -25,7 +26,7 @@ public class ProductServiceApplication {
 			entry.setCategory("FRUIT");
 			entry.setPrice(2);
 			entry.setWeight(.500);
-			productRepository.save(entry);
+			productService.addProduct(entry);
 
 			// Example object 2
 			Product entry1 = new Product();
@@ -33,7 +34,7 @@ public class ProductServiceApplication {
 			entry.setCategory("FRUIT");
 			entry.setPrice(3);
 			entry.setWeight(.700);
-			productRepository.save(entry1);
+			productService.addProduct(entry1);
 		};
 	}
 
