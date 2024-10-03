@@ -1,4 +1,4 @@
-package csci318.order_service;
+package com.csci318.order_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
