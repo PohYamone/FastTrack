@@ -21,7 +21,7 @@ public class Inventory {
 
     
     public Inventory(){
-
+        this.availableStock = 0; // by default
     }
     
 
@@ -49,10 +49,10 @@ public class Inventory {
 
 
 
-    public void setAvailableQuantity(int availableStock) {
+    public void setAvailableStock(int availableStock) {
         this.availableStock = availableStock;
     }
-    public int getAvailableQuantity(int availableStock) {
+    public int getAvailableStock() {
         return availableStock;
     }
    
