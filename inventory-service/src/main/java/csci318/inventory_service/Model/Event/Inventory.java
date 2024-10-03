@@ -18,6 +18,8 @@ public class Inventory {
 
     @Column(name = "available_stock")
     private int availableStock;
+
+    
     public Inventory(){
 
     }
