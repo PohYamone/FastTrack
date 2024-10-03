@@ -2,12 +2,14 @@ package csci318.product_service.service;
 
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import csci318.product_service.repository.ProductRepository;
 import csci318.product_service.controller.DTO.ProductDTO;
 import csci318.product_service.model.Product;
+import csci318.product_service.model.event.ProductEvent;
 
 
 
@@ -15,6 +17,9 @@ import csci318.product_service.model.Product;
 public class ProductService {
     
     private final ProductRepository productRepository;
+
+    @Autowired
+    private StreamBridge streamBridge;
 
     // Constructor injection for ProductRepository.
     @Autowired
@@ -43,6 +48,8 @@ public class ProductService {
         try {
             
             productRepository.save(p);
+            ProductEvent pe = new ProductEvent(ProductEvent.EventType.PRODUCT_CREATED, p.getId(), p.getName());
+            streamBridge.send("product-create-out-0", pe);
 
             return ResponseEntity.ok(p);
 
