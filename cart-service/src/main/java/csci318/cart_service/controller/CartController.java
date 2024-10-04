@@ -31,7 +31,7 @@ public class CartController {
     private final CartService cartService;
 
     @Autowired
-    public CartController(CartService cartService){
+    public CartController(CartService cartService) {
         this.cartService = cartService;
     }
 
@@ -46,17 +46,17 @@ public class CartController {
     }
 
     @GetMapping("/{cartId}")
-    public Cart getCartByCartId(@PathVariable Long cartId) {
+    public CartDTO getCartByCartId(@PathVariable Long cartId) {
         return cartService.getCartByCartId(cartId);
     }
 
     @GetMapping("/{cartId}/products")
-    public List<CartItemDTO> getProductsFromCart(@PathVariable Long cartId){
+    public List<CartItemDTO> getProductsFromCart(@PathVariable Long cartId) {
         return cartService.getProductsFromCart(cartId);
     }
 
     @PutMapping("/{cartId}/products")
-    public ResponseEntity<?> AddProductToCart(@PathVariable Long cartId, @RequestBody CartItems cartItems){
+    public ResponseEntity<?> AddProductToCart(@PathVariable Long cartId, @RequestBody CartItems cartItems) {
 
         boolean added = cartService.addProductToCart(cartId, cartItems);
 
@@ -66,10 +66,9 @@ public class CartController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Failed to add Product to cart");
         }
     }
-    
 
     @DeleteMapping("/{cartId}/products/{productId}")
-    public ResponseEntity<?> RemoveProductFromCart(@PathVariable Long cartId, @PathVariable Long productId){
+    public ResponseEntity<?> RemoveProductFromCart(@PathVariable Long cartId, @PathVariable Long productId) {
 
         boolean removed = cartService.removeProduct(cartId, productId);
 
@@ -80,6 +79,4 @@ public class CartController {
         }
     }
 
-
-    
 }

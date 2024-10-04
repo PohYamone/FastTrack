@@ -5,6 +5,7 @@ import java.util.Date;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -23,18 +24,18 @@ import csci318.cart_service.controller.DTO.ProductDTO;
 
 @Service
 public class CartService {
-    
+
     private final CartRepository cartRepository;
     private final RestTemplate restTemplate;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Autowired
-    public CartService(CartRepository cartRepository, RestTemplate restTemplate, ApplicationEventPublisher applicationEventPublisher){
+    public CartService(CartRepository cartRepository, RestTemplate restTemplate,
+            ApplicationEventPublisher applicationEventPublisher) {
         this.cartRepository = cartRepository;
         this.restTemplate = restTemplate;
         this.applicationEventPublisher = applicationEventPublisher;
     }
-    
 
     @Bean
     public Consumer<UserEvent> userRegisterConsumer() {
@@ -56,7 +57,7 @@ public class CartService {
         cart.setCustomerId(customerId);
         cart.setItems(new ArrayList<>());
 
-        Date date = new Date();  
+        Date date = new Date();
         cart.setDate(date);
 
         cartRepository.save(cart);
@@ -68,12 +69,10 @@ public class CartService {
         cd.setCustomerId(cart.getCustomerId());
         cd.setId(cart.getId());
         cd.setDate(date);
-        
+
         return cd;
 
     }
-
-
 
     /**
      * Retrieves all carts associated with a specific customer by their customer ID.
@@ -96,7 +95,7 @@ public class CartService {
             csDto.setCustomerId(cart.getCustomerId());
             csDto.setId(cart.getId());
             csDto.setDate(cart.getDate());
-    
+
             cartDTOs.add(csDto);
         }
 
@@ -104,28 +103,45 @@ public class CartService {
 
     }
 
-
-
-
     /**
      * Retrieves a specific cart by its cart ID.
      * 
      * @param cartId The ID of the cart to be retrieved.
-     * @return The Cart object containing cart details.
+     * @return The CartDTO object containing cart details.
      * @throws RuntimeException if the cart is not found.
      */
-    public Cart getCartByCartId(Long cartId){
+    public CartDTO getCartByCartId(Long cartId) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new RuntimeException("Cart not found with id: " + cartId));
 
-        Cart c = cartRepository.findById(cartId)
-            .orElseThrow(() -> new RuntimeException("Cart not found with id: " + cartId));
-
-        return c;
+        // Convert the Cart entity to CartDTO
+        return convertToCartDTO(cart);
     }
 
+    private CartDTO convertToCartDTO(Cart cart) {
+        CartDTO cartDTO = new CartDTO();
+        cartDTO.setId(cart.getId());
+        cartDTO.setCustomerId(cart.getCustomerId());
+        cartDTO.setDate(cart.getDate());
 
+        // Convert CartItems to CartItemDTO
+        List<CartItemDTO> cartItemDTOs = cart.getItems().stream()
+                .map(this::convertToCartItemDTO)
+                .collect(Collectors.toList());
 
+        cartDTO.setItems(cartItemDTOs);
+        return cartDTO;
+    }
 
-     
+    private CartItemDTO convertToCartItemDTO(CartItems cartItem) {
+        CartItemDTO cartItemDTO = new CartItemDTO();
+        cartItemDTO.setId(cartItem.getId());
+        cartItemDTO.setProductId(cartItem.getProductId());
+        cartItemDTO.setQuantity(cartItem.getQuantity());
+        cartItemDTO.setName(cartItem.getName()); // Assuming CartItems contains the product name
+        return cartItemDTO;
+    }
+
     /**
      * Checks if a product exists by querying the product service.
      * 
@@ -140,47 +156,38 @@ public class CartService {
         ProductDTO pdt = restTemplate.getForObject(url, ProductDTO.class);
 
         return pdt;
-         
+
     }
-
-
 
     /**
      * Adds a product to a specific cart.
      * 
-     * @param cartId The ID of the cart to which the product will be added.
-     * @param cartItems The CartItems object containing the product details and quantity.
+     * @param cartId    The ID of the cart to which the product will be added.
+     * @param cartItems The CartItems object containing the product details and
+     *                  quantity.
      * @return The updated Cart object.
      */
     public boolean addProductToCart(Long cartId, CartItems cartItems) {
 
         ProductDTO pdt = checkProduct(cartItems.getProductId());
         if (pdt == null) {
-            return false; 
+            return false;
         }
-        
-        Cart c = getCartByCartId(cartId);
-        if (c == null) {
-            return false; 
-        }
-        
+
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(() -> new RuntimeException("Cart not found with id: " + cartId));
+
         cartItems.setName(pdt.getName());
-        c.addItem(cartItems);
-    
-        cartRepository.save(c);
-    
-        return true; 
+        cart.addItem(cartItems);
+
+        cartRepository.save(cart);
+        return true;
     }
-
-
-
-
-
 
     /**
      * Removes a specific product from a cart.
      * 
-     * @param cartId The ID of the cart from which the product will be removed.
+     * @param cartId    The ID of the cart from which the product will be removed.
      * @param productId The ID of the product to be removed.
      * @return true if the product was removed successfully, false otherwise.
      */
@@ -196,11 +203,11 @@ public class CartService {
         if (items == null || items.isEmpty()) {
             return false;
         }
-        
+
         CartItems productToRemove = items.stream()
-            .filter(item -> item.getProductId().equals(productId))
-            .findFirst()
-            .orElse(null);
+                .filter(item -> item.getProductId().equals(productId))
+                .findFirst()
+                .orElse(null);
 
         if (productToRemove != null) {
 
@@ -209,13 +216,8 @@ public class CartService {
             return true;
         }
 
-        return false; 
+        return false;
     }
-
-
-
-
-    
 
     /**
      * Retrieves all products from a specific cart.
@@ -223,10 +225,10 @@ public class CartService {
      * @param cartId The ID of the cart from which products will be retrieved.
      * @return A list of CartItemDTO objects representing the products in the cart.
      */
-    public List<CartItemDTO> getProductsFromCart(Long cartId){
+    public List<CartItemDTO> getProductsFromCart(Long cartId) {
 
         Cart cart = cartRepository.findById(cartId)
-            .orElseThrow(() -> new RuntimeException("Cart not found with id: " + cartId));
+                .orElseThrow(() -> new RuntimeException("Cart not found with id: " + cartId));
 
         List<CartItemDTO> cartItemDTOs = new ArrayList<>();
 
@@ -238,7 +240,7 @@ public class CartService {
             cI.setProductId(c.getProductId());
             cI.setQuantity(c.getQuantity());
             cI.setName(c.getName());
-    
+
             cartItemDTOs.add(cI);
 
         }

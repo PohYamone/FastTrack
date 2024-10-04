@@ -47,7 +47,7 @@
             "type": "java",
             "name": "OrderServiceApplication",
             "request": "launch",
-            "mainClass": "csci318.order_service.OrderServiceApplication",
+            "mainClass": "com.csci318.order_service.OrderServiceApplication",
             "projectName": "order-service"
         },
         {

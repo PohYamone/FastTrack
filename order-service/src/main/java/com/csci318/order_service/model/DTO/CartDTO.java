@@ -1,4 +1,4 @@
-package csci318.cart_service.controller.DTO;
+package com.csci318.order_service.model.DTO;
 
 import java.util.Date;
 import java.util.List;

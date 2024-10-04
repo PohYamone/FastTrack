@@ -1,5 +1,7 @@
 package csci318.inventory_service.Controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +20,6 @@ import csci318.inventory_service.InventoryServiceApplication;
 import csci318.inventory_service.Model.Event.Inventory;
 import csci318.inventory_service.Service.InventoryService;
 
-
-
 @RestController
 @RequestMapping("/api/inventory")
 @CrossOrigin(origins = "*")
@@ -29,10 +29,11 @@ public class InventoryController {
     private final InventoryService inventoryService;
 
     @Autowired
-    public InventoryController(InventoryService inventoryService){
+    public InventoryController(InventoryService inventoryService) {
         this.inventoryService = inventoryService;
     }
-// Create a new product in the inventory
+
+    // Create a new product in the inventory
     @PostMapping("/products")
     public ResponseEntity<?> addProduct(@RequestBody Inventory inventory) {
         Inventory createdInventory = inventoryService.addProduct(inventory);
@@ -78,4 +79,3 @@ public class InventoryController {
         }
     }
 }
-

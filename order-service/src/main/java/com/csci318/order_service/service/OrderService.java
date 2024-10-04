@@ -1,17 +1,22 @@
 package com.csci318.order_service.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.csci318.order_service.event.OrderEventType;
 import com.csci318.order_service.model.Order;
 import com.csci318.order_service.model.OrderItem;
 import com.csci318.order_service.model.OrderStatus;
+import com.csci318.order_service.model.DTO.CartDTO;
+import com.csci318.order_service.model.DTO.CartItemDTO;
 import com.csci318.order_service.model.DTO.OrderDTO;
 import com.csci318.order_service.model.DTO.OrderItemDTO;
+import com.csci318.order_service.model.DTO.ProductDTO;
 import com.csci318.order_service.repository.OrderRepository;
 import com.csci318.order_service.streaming.OrderEventPublisher;
 
@@ -22,18 +27,49 @@ public class OrderService {
 
     private final OrderEventPublisher orderEventPublisher;
 
-    public OrderService(OrderEventPublisher orderEventPublisher) {
+    private final RestTemplate restTemplate;
+
+    public OrderService(OrderEventPublisher orderEventPublisher, RestTemplate restTemplate) {
         this.orderEventPublisher = orderEventPublisher;
+        this.restTemplate = restTemplate;
     }
 
-    public OrderDTO createOrder(OrderDTO orderDTO) {
-        Order order = convertToOrder(orderDTO);
-        for (OrderItem item : order.getOrderItems()) {
+    public OrderDTO createOrder(Long cartId) {
+        String cartServiceURL = "http://localhost:8083/api/carts/" + cartId;
+        CartDTO cartDTO = restTemplate.getForObject(cartServiceURL, CartDTO.class);
+
+        if (cartDTO == null || cartDTO.getItems() == null || cartDTO.getItems().isEmpty()) {
+            throw new RuntimeException("Cart is empty or not found");
+        }
+
+        List<OrderItem> orderItems = cartDTO.getItems().stream()
+                .map(cartItem -> {
+                    ProductDTO product = fetchProductDetails(cartItem.getProductId());
+                    return convertCartItemToOrderItem(cartItem, product.getPrice());
+                })
+                .collect(Collectors.toList());
+
+        // Create new order
+        Order order = new Order();
+        order.setCustomerId(cartDTO.getCustomerId());
+        order.setStatus(OrderStatus.PENDING);
+        order.setOrderItems(orderItems);
+
+        // Set order reference in each order item
+        for (OrderItem item : orderItems) {
             item.setOrder(order);
         }
+
         Order savedOrder = orderRepository.save(order);
-        orderEventPublisher.publishOrderEvent(order.getId(), order.getCustomerId(), OrderEventType.ORDER_CREATED);
+        orderEventPublisher.publishOrderEvent(savedOrder.getId(), savedOrder.getCustomerId(),
+                OrderEventType.ORDER_CREATED);
+
         return convertToOrderDTO(savedOrder);
+    }
+
+    private ProductDTO fetchProductDetails(Long productId) {
+        String productURL = "http://localhost:8081/api/products/" + productId;
+        return restTemplate.getForObject(productURL, ProductDTO.class);
     }
 
     public OrderDTO getOrderById(Long orderId) {
@@ -141,6 +177,14 @@ public class OrderService {
         order.setOrderItems(orderItems);
 
         return order;
+    }
+
+    private OrderItem convertCartItemToOrderItem(CartItemDTO cartItemDTO, Double price) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setProductId(cartItemDTO.getProductId());
+        orderItem.setQuantity(cartItemDTO.getQuantity());
+        orderItem.setPrice(price);
+        return orderItem;
     }
 
 }

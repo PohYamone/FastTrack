@@ -1,4 +1,4 @@
-package csci318.product_service.controller.DTO;
+package com.csci318.order_service.model.DTO;
 
 public class ProductDTO {
 

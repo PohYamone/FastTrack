@@ -11,11 +11,9 @@ import csci318.product_service.controller.DTO.ProductDTO;
 import csci318.product_service.model.Product;
 import csci318.product_service.model.event.ProductEvent;
 
-
-
 @Service
 public class ProductService {
-    
+
     private final ProductRepository productRepository;
 
     @Autowired
@@ -23,7 +21,7 @@ public class ProductService {
 
     // Constructor injection for ProductRepository.
     @Autowired
-    public ProductService(ProductRepository productRepository){
+    public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
 
@@ -33,10 +31,10 @@ public class ProductService {
      * @param p The Product object to be added.
      * @return A ResponseEntity containing the result of the product addition.
      */
-    public ResponseEntity<?> addProduct(Product p){
+    public ResponseEntity<?> addProduct(Product p) {
 
         // Check if the Product object is null.
-        if(p == null){
+        if (p == null) {
             return ResponseEntity.badRequest().body("Product data is missing");
         }
 
@@ -46,7 +44,7 @@ public class ProductService {
         }
 
         try {
-            
+
             productRepository.save(p);
             ProductEvent pe = new ProductEvent(ProductEvent.EventType.PRODUCT_CREATED, p.getId(), p.getName());
             streamBridge.send("product-create-out-0", pe);
@@ -59,43 +57,42 @@ public class ProductService {
         }
     }
 
-
     /**
      * Searches for a product by its unique ID.
      *
      * @param id The UUID of the product.
      * @return A ResponseEntity containing the product or an error message.
      */
-    public ProductDTO searchProduct(Long id){
+    public ProductDTO searchProduct(Long id) {
 
         Optional<Product> optionalProduct = productRepository.findById(id);
-    
+
         if (optionalProduct.isPresent()) {
 
             Product product = optionalProduct.get();
             ProductDTO productDTO = new ProductDTO();
-            
+
             productDTO.setProductId(product.getId());
             productDTO.setName(product.getName());
-            
+            productDTO.setPrice(product.getPrice());
+
             return productDTO;
 
         } else {
             throw new RuntimeException("Product not found with id: " + id);
         }
-        
-    }
 
+    }
 
     /**
      * Retrieves all products from the repository.
      *
      * @return A ResponseEntity containing a list of all products.
      */
-    public ResponseEntity<?> getProducts(){
+    public ResponseEntity<?> getProducts() {
 
         return ResponseEntity.ok(productRepository.findAll());
-        
+
     }
 
 }

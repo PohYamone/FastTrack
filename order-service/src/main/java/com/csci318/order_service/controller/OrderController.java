@@ -30,9 +30,9 @@ public class OrderController {
     }
 
     // Create a new order
-    @PostMapping
-    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderRequest) {
-        OrderDTO newOrder = orderService.createOrder(orderRequest);
+    @PostMapping("/{cartId}")
+    public ResponseEntity<OrderDTO> createOrder(@PathVariable Long cartId) {
+        OrderDTO newOrder = orderService.createOrder(cartId);
         return ResponseEntity.status(HttpStatus.CREATED).body(newOrder);
     }
 
