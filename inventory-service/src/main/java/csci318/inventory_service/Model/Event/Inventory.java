@@ -11,7 +11,7 @@ public class Inventory {
 
     @Id
     @Column(name = "product_id")
-    private String productId;
+    private Long productId;
 
     @Column(name = "product_name")
     private String productName;
@@ -19,44 +19,38 @@ public class Inventory {
     @Column(name = "available_stock")
     private int availableStock;
 
-    
-    public Inventory(){
+    public Inventory() {
         this.availableStock = 0; // by default
     }
-    
 
-    public Inventory(String productId, String productName, int availableStock){
+    public Inventory(Long productId, String productName, int availableStock) {
         this.productId = productId;
         this.productName = productName;
         this.availableStock = availableStock;
     }
 
-    public void setProductId(String productId){
+    public void setProductId(Long productId) {
         this.productId = productId;
     }
-    public String getProductId(){
+
+    public Long getProductId() {
         return productId;
     }
 
-
-
-    public void setProductName(String productName){
+    public void setProductName(String productName) {
         this.productName = productName;
     }
-    public String getProductName(){
+
+    public String getProductName() {
         return productName;
     }
-
-
 
     public void setAvailableStock(int availableStock) {
         this.availableStock = availableStock;
     }
+
     public int getAvailableStock() {
         return availableStock;
     }
-   
+
 }
-
-
-

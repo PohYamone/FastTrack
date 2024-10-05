@@ -1,5 +1,4 @@
 
-
 package csci318.inventory_service.Repository;
 
 import java.util.List;
@@ -8,9 +7,8 @@ import org.springframework.stereotype.Repository;
 import csci318.inventory_service.Model.Event.Inventory;
 
 @Repository
-public interface InventoryRepository extends JpaRepository<Inventory, String> {
-    
+public interface InventoryRepository extends JpaRepository<Inventory, Long> {
+
     // Custom query method to find products by name
     List<Inventory> findByProductName(String productName);
 }
-

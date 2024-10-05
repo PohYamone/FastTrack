@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import csci318.inventory_service.InventoryServiceApplication;
+import csci318.inventory_service.Model.DTO.InventoryDTO;
 import csci318.inventory_service.Model.Event.Inventory;
 import csci318.inventory_service.Service.InventoryService;
 
@@ -25,7 +26,6 @@ import csci318.inventory_service.Service.InventoryService;
 @CrossOrigin(origins = "*")
 public class InventoryController {
 
-    @Autowired
     private final InventoryService inventoryService;
 
     @Autowired
@@ -35,31 +35,28 @@ public class InventoryController {
 
     // Create a new product in the inventory
     @PostMapping("/products")
-    public ResponseEntity<?> addProduct(@RequestBody Inventory inventory) {
-        Inventory createdInventory = inventoryService.addProduct(inventory);
+    public ResponseEntity<InventoryDTO> addProduct(@RequestBody InventoryDTO inventoryDTO) {
+        InventoryDTO createdInventory = inventoryService.addProduct(inventoryDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdInventory);
     }
 
     // Get a product by its product ID
     @GetMapping("/products/{productId}")
-    public ResponseEntity<?> getProductById(@PathVariable String productId) {
-        Inventory inventory = inventoryService.getProductById(productId);
-        if (inventory != null) {
-            return ResponseEntity.ok(inventory);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
-        }
+    public ResponseEntity<InventoryDTO> getProductById(@PathVariable Long productId) {
+        InventoryDTO inventoryDTO = inventoryService.getProductById(productId);
+        return ResponseEntity.ok(inventoryDTO);
     }
 
     // Get all products in the inventory
     @GetMapping("/products")
-    public List<Inventory> getAllProducts() {
-        return inventoryService.getAllProducts();
+    public ResponseEntity<List<InventoryDTO>> getAllProducts() {
+        List<InventoryDTO> allProducts = inventoryService.getAllProducts();
+        return ResponseEntity.ok(allProducts);
     }
 
     // Update stock for a specific product
     @PutMapping("/products/{productId}/stock")
-    public ResponseEntity<?> updateStock(@PathVariable String productId, @RequestParam int amount) {
+    public ResponseEntity<?> updateStock(@PathVariable Long productId, @RequestParam int amount) {
         boolean updated = inventoryService.updateStock(productId, amount);
         if (updated) {
             return ResponseEntity.ok("Stock updated successfully");
@@ -70,7 +67,7 @@ public class InventoryController {
 
     // Remove a product from the inventory
     @DeleteMapping("/products/{productId}")
-    public ResponseEntity<?> removeProduct(@PathVariable String productId) {
+    public ResponseEntity<?> removeProduct(@PathVariable Long productId) {
         boolean removed = inventoryService.removeProduct(productId);
         if (removed) {
             return ResponseEntity.ok("Product removed successfully");

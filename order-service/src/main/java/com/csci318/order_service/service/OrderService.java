@@ -14,6 +14,7 @@ import com.csci318.order_service.model.OrderItem;
 import com.csci318.order_service.model.OrderStatus;
 import com.csci318.order_service.model.DTO.CartDTO;
 import com.csci318.order_service.model.DTO.CartItemDTO;
+import com.csci318.order_service.model.DTO.InventoryDTO;
 import com.csci318.order_service.model.DTO.OrderDTO;
 import com.csci318.order_service.model.DTO.OrderItemDTO;
 import com.csci318.order_service.model.DTO.ProductDTO;
@@ -40,6 +41,14 @@ public class OrderService {
 
         if (cartDTO == null || cartDTO.getItems() == null || cartDTO.getItems().isEmpty()) {
             throw new RuntimeException("Cart is empty or not found");
+        }
+
+        // Check stock availability for each product
+        for (CartItemDTO cartItem : cartDTO.getItems()) {
+            boolean stockAvailable = checkStock(cartItem.getProductId(), cartItem.getQuantity());
+            if (!stockAvailable) {
+                throw new RuntimeException("Insufficient stock for product ID: " + cartItem.getProductId());
+            }
         }
 
         List<OrderItem> orderItems = cartDTO.getItems().stream()
@@ -70,6 +79,17 @@ public class OrderService {
     private ProductDTO fetchProductDetails(Long productId) {
         String productURL = "http://localhost:8081/api/products/" + productId;
         return restTemplate.getForObject(productURL, ProductDTO.class);
+    }
+
+    private boolean checkStock(Long productId, int requestedQuantity) {
+        String inventoryServiceURL = "http://localhost:8084/api/inventory/products/" + productId;
+        InventoryDTO inventory = restTemplate.getForObject(inventoryServiceURL, InventoryDTO.class);
+
+        if (inventory == null) {
+            throw new RuntimeException("Product not found in inventory with ID: " + productId);
+        }
+
+        return inventory.getAvailableStock() >= requestedQuantity;
     }
 
     public OrderDTO getOrderById(Long orderId) {
@@ -166,18 +186,18 @@ public class OrderService {
         return orderItem;
     }
 
-    private Order convertToOrder(OrderDTO orderDTO) {
-        Order order = new Order();
-        order.setCustomerId(orderDTO.getCustomerId());
-        order.setStatus(orderDTO.getStatus());
+    // private Order convertToOrder(OrderDTO orderDTO) {
+    // Order order = new Order();
+    // order.setCustomerId(orderDTO.getCustomerId());
+    // order.setStatus(orderDTO.getStatus());
 
-        List<OrderItem> orderItems = orderDTO.getOrderItems().stream()
-                .map(this::convertToOrderItem)
-                .collect(Collectors.toList());
-        order.setOrderItems(orderItems);
+    // List<OrderItem> orderItems = orderDTO.getOrderItems().stream()
+    // .map(this::convertToOrderItem)
+    // .collect(Collectors.toList());
+    // order.setOrderItems(orderItems);
 
-        return order;
-    }
+    // return order;
+    // }
 
     private OrderItem convertCartItemToOrderItem(CartItemDTO cartItemDTO, Double price) {
         OrderItem orderItem = new OrderItem();
