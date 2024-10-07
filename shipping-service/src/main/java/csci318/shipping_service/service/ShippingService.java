@@ -26,16 +26,17 @@ public class ShippingService {
     public Shipping createShipping(PaymentEvent paymentEvent){
 
         Shipping s = convertShipping(paymentEvent);
+        shippingRepository.save(s);
+
+        shippingEventPublisher.createShipmentEvent(s);
 
         return s;
-
     }
 
 
     public Shipping convertShipping(PaymentEvent paymentEvent){
 
         return new Shipping(paymentEvent.getOrderId());
-
     }
 
     
