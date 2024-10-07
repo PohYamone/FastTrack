@@ -8,6 +8,8 @@ public class PaymentEvent implements Serializable {
     private PaymentStatus status;
     private String timestamp;
 
+    public PaymentEvent(){};
+
     public PaymentEvent(Long paymentId, Long orderId, PaymentStatus status, String timestamp) {
         this.paymentId = paymentId;
         this.orderId = orderId;
