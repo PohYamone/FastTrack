@@ -23,6 +23,9 @@ public class OrderItem {
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
+    public OrderItem() {
+    }
+
     // Getters and Setters
     public Long getId() {
         return id;

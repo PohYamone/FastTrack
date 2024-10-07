@@ -55,7 +55,7 @@
             "name": "PaymentServiceApplication",
             "request": "launch",
             "mainClass": "csci318.payment_service.PaymentServiceApplication",
-            "projectName": "payment-service"
+            "projectName": "payment-service"`
         },
         {
             "type": "java",

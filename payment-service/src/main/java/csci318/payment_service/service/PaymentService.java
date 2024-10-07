@@ -1,6 +1,5 @@
 package csci318.payment_service.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import csci318.payment_service.model.Payment;
 import csci318.payment_service.model.PaymentStatus;
@@ -36,7 +35,8 @@ public class PaymentService {
 
         Payment savedPayment = paymentRepository.save(payment);
 
-        paymentEventPublisher.publishPaymentEvent(payment.getId(), payment.getOrderId(), payment.getStatus(),
+        paymentEventPublisher.publishPaymentEvent(payment.getId(), payment.getOrderId(), payment.getCustomerId(),
+                payment.getStatus(),
                 payment.getPaymentDate().format(formatter));
 
         return convertToDTO(savedPayment);
@@ -64,7 +64,8 @@ public class PaymentService {
         payment.setStatus(status); // Update the payment status
         paymentRepository.save(payment);
 
-        paymentEventPublisher.publishPaymentEvent(payment.getId(), payment.getOrderId(), status,
+        paymentEventPublisher.publishPaymentEvent(payment.getId(), payment.getOrderId(), payment.getCustomerId(),
+                status,
                 payment.getPaymentDate().format(formatter));
     }
 

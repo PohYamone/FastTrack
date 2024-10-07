@@ -54,16 +54,19 @@ public class InventoryService {
                 .collect(Collectors.toList());
     }
 
-    public boolean updateStock(Long productId, int newStock) {
+    public boolean updateStock(Long productId, int quantityChange) {
         Inventory inventory = inventoryRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + productId));
 
-        if (newStock >= 0) {
-            inventory.setAvailableStock(newStock);
-            inventoryRepository.save(inventory);
-            return true;
+        int newStock = inventory.getAvailableStock() + quantityChange;
+
+        if (newStock < 0) {
+            throw new IllegalArgumentException("Insufficient stock for product with id: " + productId);
         }
-        return false;
+
+        inventory.setAvailableStock(newStock);
+        inventoryRepository.save(inventory);
+        return true;
     }
 
     public boolean removeProduct(Long productId) {
