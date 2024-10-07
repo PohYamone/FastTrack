@@ -13,15 +13,12 @@ import com.csci318.order_service.event.OrderEventType;
 public class OrderEventPublisher {
     private final StreamBridge streamBridge;
 
-    @Value("${spring.cloud.stream.bindings.orderEvent-out-0.destination}")
-    private String orderEventsTopic;
-
     public OrderEventPublisher(StreamBridge streamBridge) {
         this.streamBridge = streamBridge;
     }
 
     public void publishOrderEvent(Long orderId, Long customerId, OrderEventType eventType) {
         OrderEvent orderEvent = new OrderEvent(orderId, customerId, eventType, LocalDateTime.now());
-        streamBridge.send(orderEventsTopic, orderEvent);
+        streamBridge.send("orderEvent-out-0", orderEvent);
     }
 }

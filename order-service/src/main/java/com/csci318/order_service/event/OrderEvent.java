@@ -1,8 +1,9 @@
 package com.csci318.order_service.event;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class OrderEvent {
+public class OrderEvent implements Serializable {
     private Long orderId;
     private Long customerId;
     private OrderEventType eventType;
