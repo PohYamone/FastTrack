@@ -14,9 +14,17 @@ public class ShippingEventPublisher {
         this.streamBridge = streamBridge;
     }
 
+
     public void createShipmentEvent(Shipping s){
+        
+        System.out.println(s.getStatus());
 
+        
+    }
 
+    public void updateShipmentEvent(Shipping s){
+
+        System.out.println(s.getStatus());
         
     }
 

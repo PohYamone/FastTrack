@@ -9,6 +9,8 @@ public class OrderEvent implements Serializable {
     private OrderEventType eventType;
     private LocalDateTime timestamp;
 
+    public OrderEvent(){};
+    
     public OrderEvent(Long orderId, Long customerId, OrderEventType eventType, LocalDateTime timestamp) {
         this.orderId = orderId;
         this.customerId = customerId;

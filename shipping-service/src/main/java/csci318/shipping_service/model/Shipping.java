@@ -14,8 +14,8 @@ public class Shipping {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private Long shippingId;
+    private Long customerId;
     private Long orderId;
     private Address deliverAddress;
 
@@ -24,16 +24,25 @@ public class Shipping {
 
     private LocalDateTime shippingDate;
 
-    public Shipping() {
-    }
-
-    public Shipping(Long orderId) {
+    public Shipping(){};
+    
+    public Shipping(Long orderId, Long customerId, Address deliAddress) {
         this.orderId = orderId;
+        this.customerId = customerId;
+        this.deliverAddress = deliAddress;
         this.status = ShippingStatus.PENDING;
         this.shippingDate = LocalDateTime.now();
     }
 
     // Getters and Setters
+    public Long getCustomerId(){
+        return customerId;
+    }
+
+    public void setCustomerId(Long customerId){
+        this.customerId = customerId;
+    }
+
     public Address getAddress() {
         return deliverAddress;
     }
@@ -43,11 +52,11 @@ public class Shipping {
     }
 
     public Long getId() {
-        return id;
+        return shippingId;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.shippingId = id;
     }
 
     public Long getOrderId() {
@@ -73,5 +82,31 @@ public class Shipping {
     public void setShippingDate(LocalDateTime shippingDate) {
         this.shippingDate = shippingDate;
     }
+
+    public void nextStatus() {
+        ShippingStatus[] statuses = ShippingStatus.values();
+        int currentIndex = this.status.ordinal();
+
+        // Ensure we don't go out of bounds
+        if (currentIndex < statuses.length - 1) {
+            this.status = statuses[currentIndex + 1];
+        } else {
+            throw new IllegalStateException("No next status available");
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Shipping{" +
+                "id=" + shippingId +
+                ", customerId=" + customerId +
+                ", orderId=" + orderId +
+                ", deliverAddress=" + deliverAddress +
+                ", status=" + status +
+                ", shippingDate=" + shippingDate +
+                '}';
+    }
+
+
 }
 

@@ -7,5 +7,7 @@ import csci318.shipping_service.model.Shipping;
 
 @Repository
 public interface ShippingRepository extends JpaRepository<Shipping, Long>{
-    
+
+    Shipping findByShippingId(Long id);
+
 }

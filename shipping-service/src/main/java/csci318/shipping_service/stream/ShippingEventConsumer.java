@@ -20,7 +20,7 @@ public class ShippingEventConsumer {
     }
 
 
-     @Bean
+    @Bean
     public Consumer<PaymentEvent> processPayment() {
         return paymentEvent -> {
             if(paymentEvent.getStatus() == PaymentStatus.SUCCESS){

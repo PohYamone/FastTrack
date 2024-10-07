@@ -1,6 +1,8 @@
 package csci318.shipping_service.controller;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +17,11 @@ public class ShippingController {
 
     public ShippingController(ShippingService shippingService) {
         this.shippingService = shippingService;
+    }
+
+    @PatchMapping("/{shippingId}/update")
+    public void updateShipping(@PathVariable Long shippingId){
+       shippingService.updateShipping(shippingId);
     }
 
 
