@@ -17,25 +17,31 @@ public class Shipping {
     private Long id;
 
     private Long orderId;
-    private Long customerId;
-    private Double amount;
+    private Address deliverAddress;
 
     @Enumerated(EnumType.STRING)
     private ShippingStatus status;
 
-    private LocalDateTime paymentDate;
+    private LocalDateTime shippingDate;
 
     public Shipping() {
     }
 
-    public Shipping(Long orderId, Long customerId, ShippingStatus status) {
+    public Shipping(Long orderId) {
         this.orderId = orderId;
-        this.customerId = customerId;
-        this.status = status;
-        this.paymentDate = LocalDateTime.now();
+        this.status = ShippingStatus.PENDING;
+        this.shippingDate = LocalDateTime.now();
     }
 
     // Getters and Setters
+    public Address getAddress() {
+        return deliverAddress;
+    }
+
+    public void setAddress(Address deliverAddress) {
+        this.deliverAddress = deliverAddress;
+    }
+
     public Long getId() {
         return id;
     }
@@ -52,22 +58,6 @@ public class Shipping {
         this.orderId = orderId;
     }
 
-    public Long getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
-
     public ShippingStatus getStatus() {
         return status;
     }
@@ -76,12 +66,12 @@ public class Shipping {
         this.status = status;
     }
 
-    public LocalDateTime getPaymentDate() {
-        return paymentDate;
+    public LocalDateTime getShippingDate() {
+        return shippingDate;
     }
 
-    public void setPaymentDate(LocalDateTime paymentDate) {
-        this.paymentDate = paymentDate;
+    public void setShippingDate(LocalDateTime shippingDate) {
+        this.shippingDate = shippingDate;
     }
 }
 

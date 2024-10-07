@@ -22,9 +22,9 @@ public class ShippingEventConsumer {
      @Bean
     public Consumer<PaymentEvent> processPayment() {
         return paymentEvent -> {
-            
+
             if(paymentEvent.getStatus() == PaymentStatus.SUCCESS){
-                System.out.println("I am receiving payment event" + paymentEvent);
+                
             }
             
         };

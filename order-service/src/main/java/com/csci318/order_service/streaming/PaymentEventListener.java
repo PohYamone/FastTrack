@@ -22,13 +22,13 @@ public class PaymentEventListener {
     public Consumer<PaymentEvent> processPayment() {
         return paymentEvent -> {
             System.out.println("I am receiving payment event" + paymentEvent);
-            /*if (paymentEvent.getStatus() == PaymentStatus.SUCCESS) {
+            if (paymentEvent.getStatus() == PaymentStatus.SUCCESS) {
                 // Update the order status to CONFIRMED if payment is successful
                 orderService.updateOrderStatus(paymentEvent.getOrderId(), OrderStatus.CONFIRMED);
             } else if (paymentEvent.getStatus() == PaymentStatus.FAIL) {
                 // Handle payment failure, potentially cancel the order
                 orderService.updateOrderStatus(paymentEvent.getOrderId(), OrderStatus.CANCELLED);
-            }*/
+            }
         };
     }
 

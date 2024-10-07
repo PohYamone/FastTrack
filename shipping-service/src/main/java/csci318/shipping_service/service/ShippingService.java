@@ -4,6 +4,8 @@ import java.time.format.DateTimeFormatter;
 
 import org.springframework.stereotype.Service;
 
+import csci318.shipping_service.model.Shipping;
+import csci318.shipping_service.model.event.PaymentEvent;
 import csci318.shipping_service.repository.ShippingRepository;
 import csci318.shipping_service.stream.ShippingEventPublisher;
 
@@ -20,7 +22,21 @@ public class ShippingService {
         this.shippingEventPublisher = shippingEventPublisher;
     }
 
-    
+
+    public Shipping createShipping(PaymentEvent paymentEvent){
+
+        Shipping s = convertShipping(paymentEvent);
+
+        return s;
+
+    }
+
+
+    public Shipping convertShipping(PaymentEvent paymentEvent){
+
+        return new Shipping(paymentEvent.getOrderId());
+
+    }
 
     
 }
