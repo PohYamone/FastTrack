@@ -31,9 +31,9 @@ public class ProductServiceApplication {
 			// Example object 2
 			Product entry1 = new Product();
 			entry1.setName("Bannana");
-			entry.setCategory("FRUIT");
-			entry.setPrice(3);
-			entry.setWeight(.700);
+			entry1.setCategory("FRUIT");
+			entry1.setPrice(3);
+			entry1.setWeight(.700);
 			productService.addProduct(entry1);
 		};
 	}

@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import csci318.inventory_service.InventoryServiceApplication;
 import csci318.inventory_service.Model.DTO.InventoryDTO;
-import csci318.inventory_service.Model.Event.Inventory;
 import csci318.inventory_service.Service.InventoryService;
 
 @RestController

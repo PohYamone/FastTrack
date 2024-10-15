@@ -3,26 +3,30 @@ package csci318.product_service.service;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import csci318.product_service.repository.ProductRepository;
 import csci318.product_service.controller.DTO.ProductDTO;
 import csci318.product_service.model.Product;
+import csci318.product_service.model.event.EventType;
 import csci318.product_service.model.event.ProductEvent;
 
 @Service
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Autowired
     private StreamBridge streamBridge;
 
     // Constructor injection for ProductRepository.
     @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.productRepository = productRepository;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     /**
@@ -46,8 +50,8 @@ public class ProductService {
         try {
 
             productRepository.save(p);
-            ProductEvent pe = new ProductEvent(ProductEvent.EventType.PRODUCT_CREATED, p.getId(), p.getName());
-            streamBridge.send("product-create-out-0", pe);
+            ProductEvent pe = new ProductEvent(EventType.PRODUCT_CREATED, p.getId(), p.getName());
+            applicationEventPublisher.publishEvent(pe);
 
             return ResponseEntity.ok(p);
 
@@ -94,5 +98,37 @@ public class ProductService {
         return ResponseEntity.ok(productRepository.findAll());
 
     }
+
+
+    /**
+ * Deletes a product by its unique ID.
+ *
+ * @param id The ID of the product to be deleted.
+ * @return A ResponseEntity indicating the result of the delete operation.
+ */
+public ResponseEntity<?> deleteProduct(Long id) {
+    try {
+    
+        Optional<Product> optionalProduct = productRepository.findById(id);
+
+        // Check if the product exists
+        if (optionalProduct.isPresent()) {
+            Product product = optionalProduct.get();
+
+            // Delete the product
+            productRepository.delete(product);
+
+            // Create a ProductEvent for product deletion
+            ProductEvent pe = new ProductEvent(EventType.PRODUCT_DELETED, product.getId(), product.getName());
+            applicationEventPublisher.publishEvent(pe);
+
+            return ResponseEntity.ok("Product with ID " + id + " was deleted successfully.");
+        } else {
+            return ResponseEntity.status(404).body("Product not found with ID: " + id);
+        }
+    } catch (Exception e) {
+        return ResponseEntity.badRequest().body("Failed to delete product with ID: " + id);
+    }
+}
 
 }

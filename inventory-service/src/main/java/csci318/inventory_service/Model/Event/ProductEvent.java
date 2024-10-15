@@ -1,4 +1,4 @@
-package csci318.product_service.model.event;
+package csci318.inventory_service.Model.Event;
 
 import java.io.Serializable;
 
