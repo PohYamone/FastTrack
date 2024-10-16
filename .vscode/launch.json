@@ -38,10 +38,10 @@
         },
         {
             "type": "java",
-            "name": "NotificationServiceApplication",
+            "name": "AnalyicsServiceApplication",
             "request": "launch",
-            "mainClass": "csci318.notification_service.NotificationServiceApplication",
-            "projectName": "notification-service"
+            "mainClass": "csci318.analytics_service.AnalyicsServiceApplication",
+            "projectName": "analytics-service"
         },
         {
             "type": "java",
@@ -55,7 +55,7 @@
             "name": "PaymentServiceApplication",
             "request": "launch",
             "mainClass": "csci318.payment_service.PaymentServiceApplication",
-            "projectName": "payment-service"`
+            "projectName": "payment-service"
         },
         {
             "type": "java",
@@ -73,7 +73,7 @@
                 "ProductServiceApplication",
                 "UserApplication",
                 "InventoryServiceApplication",
-                "NotificationServiceApplication",
+                "AnalyicsServiceApplication",
                 "OrderServiceApplication",
                 "PaymentServiceApplication",
                 "ShippingServiceApplication"
