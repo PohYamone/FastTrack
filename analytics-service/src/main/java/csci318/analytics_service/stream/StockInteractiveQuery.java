@@ -1,4 +1,4 @@
-package csci318.inventory_service.Service;
+package csci318.analytics-service.Service;
 
 import java.util.List;
 import java.util.ArrayList;

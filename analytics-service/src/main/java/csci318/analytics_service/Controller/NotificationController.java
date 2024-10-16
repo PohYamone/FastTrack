@@ -13,9 +13,23 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
+    
+    @Autowired
+    private StockInteractiveQuery stockInteractiveQuery;
+
     @Autowired
     public NotificationController(NotificationService notificationService) {
         this.notificationService = notificationService;
+    }
+
+    @GetMapping("/stock-levels")
+    public List<Inventory> getStockLevels() {
+        return stockInteractiveQuery.getAllStockLevels();
+    }
+
+    @GetMapping("/stock-levels/{productId}")
+    public Inventory getStockLevelByProduct(@PathVariable Long productId) {
+        return stockInteractiveQuery.getStockLevel(productId);
     }
 
     @PostMapping("/send")

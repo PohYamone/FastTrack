@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import csci318.inventory_service.Model.DTO.InventoryDTO;
 import csci318.inventory_service.Model.Event.Inventory;
 import csci318.inventory_service.Service.InventoryService;
-import csci318.inventory_service.Service.StockInteractiveQuery;
 
 @RestController
 @RequestMapping("/api/inventory")
@@ -27,9 +26,6 @@ import csci318.inventory_service.Service.StockInteractiveQuery;
 public class InventoryController {
 
     private final InventoryService inventoryService;
-
-    @Autowired
-    private StockInteractiveQuery stockInteractiveQuery;
 
     @Autowired
     public InventoryController(InventoryService inventoryService) {
@@ -41,16 +37,6 @@ public class InventoryController {
     public ResponseEntity<InventoryDTO> addProduct(@RequestBody InventoryDTO inventoryDTO) {
         InventoryDTO createdInventory = inventoryService.addProduct(inventoryDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdInventory);
-    }
-
-    @GetMapping("/stock-levels")
-    public List<Inventory> getStockLevels() {
-        return stockInteractiveQuery.getAllStockLevels();
-    }
-
-    @GetMapping("/stock-levels/{productId}")
-    public Inventory getStockLevelByProduct(@PathVariable Long productId) {
-        return stockInteractiveQuery.getStockLevel(productId);
     }
 
     // Get a product by its product ID
