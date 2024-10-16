@@ -1,4 +1,4 @@
-package csci318.analytics-service.Service;
+package csci318.inventory_service.Service;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -11,8 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.binder.kafka.streams.InteractiveQueryService;
 import org.springframework.stereotype.Service;
 
-import csci318.inventory_service.Model.Event.Inventory;
+import csci318.inventory_service.Model.StockItem;
 import csci318.inventory_service.stream.StockStreamProcessor;
+
+
+
+
+
 
 @Service
 public class StockInteractiveQuery {
@@ -20,29 +25,29 @@ public class StockInteractiveQuery {
     @Autowired
     private InteractiveQueryService interactiveQueryService;
 
-    public List<Inventory> getAllStockLevels() {
-        List<Inventory> stockByProductList = new ArrayList<>();
+    public List<StockItem> getAllStockLevels() {
+        List<StockItem> stockByProductList = new ArrayList<>();
         KeyValueIterator<Long, Integer> all = getTotalStockStore().all();
         while (all.hasNext()) {
             KeyValue<Long, Integer> kv = all.next();
-            Inventory stockPerProduct = new Inventory();
+            StockItem stockPerProduct = new StockItem();
             stockPerProduct.setProductId(kv.key);
-            stockPerProduct.setAvailableStock(kv.value);
+            stockPerProduct.setStock(kv.value);
             stockByProductList.add(stockPerProduct);
         }
         return stockByProductList;
     }
 
-    public Inventory getStockLevel(Long productId) {
+    public StockItem getStockLevel(Long productId) {
         Integer stockLevel = getTotalStockStore().get(productId);
 
         if (stockLevel == null) {
             throw new RuntimeException("Product with ID " + productId + " not found in stock.");
         }
 
-        Inventory inventory = new Inventory();
+        StockItem inventory = new StockItem();
         inventory.setProductId(productId);
-        inventory.setAvailableStock(stockLevel);
+        inventory.setStock(stockLevel);
         return inventory;
     }
 
@@ -50,4 +55,6 @@ public class StockInteractiveQuery {
         return this.interactiveQueryService.getQueryableStore(StockStreamProcessor.TOTAL_STOCK,
                 QueryableStoreTypes.keyValueStore());
     }
+
+    
 }
