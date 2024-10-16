@@ -1,25 +1,23 @@
 package csci318.shipping_service.model.event;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import csci318.shipping_service.model.ShippingStatus;
-
-public class ShippingEvent {
-
-    private Long shippingId;
+public class OrderEvent implements Serializable {
     private Long orderId;
-    private ShippingStatus eventType;
+    private Long customerId;
+    private OrderEventType eventType;
     private LocalDateTime timestamp;
 
-    public ShippingEvent(){};
+    public OrderEvent(){};
     
-    public ShippingEvent(Long orderId, Long shippingId, ShippingStatus eventType, LocalDateTime timestamp) {
+    public OrderEvent(Long orderId, Long customerId, OrderEventType eventType, LocalDateTime timestamp) {
         this.orderId = orderId;
-        this.shippingId = shippingId;
+        this.customerId = customerId;
         this.eventType = eventType;
         this.timestamp = timestamp;
     }
-    
+
     public Long getOrderId() {
         return this.orderId;
     }
@@ -28,19 +26,19 @@ public class ShippingEvent {
         this.orderId = orderId;
     }
 
-    public Long getShippingId() {
-        return this.shippingId;
+    public Long getCustomerId() {
+        return this.customerId;
     }
 
-    public void setShippingId(Long shippingId) {
-        this.shippingId = shippingId;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
-    public ShippingStatus getEventType() {
+    public OrderEventType getEventType() {
         return this.eventType;
     }
 
-    public void setEventType(ShippingStatus eventType) {
+    public void setEventType(OrderEventType eventType) {
         this.eventType = eventType;
     }
 
@@ -51,5 +49,4 @@ public class ShippingEvent {
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
-    
 }

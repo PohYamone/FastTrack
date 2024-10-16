@@ -1,9 +1,11 @@
 package csci318.shipping_service.stream;
 
 import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import csci318.shipping_service.model.Shipping;
+import csci318.shipping_service.model.event.ShippingEvent;
 
 @Service
 public class ShippingEventPublisher {
@@ -18,14 +20,15 @@ public class ShippingEventPublisher {
     public void createShipmentEvent(Shipping s){
         
         System.out.println(s.getStatus());
-
         
     }
 
-    public void updateShipmentEvent(Shipping s){
+    @EventListener
+    public void updateShipmentEvent(ShippingEvent s){
 
-        System.out.println(s.getStatus());
-        
+            streamBridge.send("shippingEvent-out-0", s);
+            System.out.println(s.getEventType());
+               
     }
 
 

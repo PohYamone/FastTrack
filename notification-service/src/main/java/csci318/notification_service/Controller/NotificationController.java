@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import csci318.notification_service.Model.NotificationService;
+import csci318.notification_service.Service.NotificationService;
 
 
 @RestController
