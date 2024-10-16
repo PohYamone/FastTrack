@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +17,12 @@ import csci318.inventory_service.Repository.InventoryRepository;
 public class InventoryService {
 
     private final InventoryRepository inventoryRepository;
+    private final StreamBridge streamBridge;
 
     @Autowired
-    private KafkaTemplate<String, StockEvent> kafkaTemplate;
-
-    @Autowired
-    public InventoryService(InventoryRepository inventoryRepository) {
+    public InventoryService(InventoryRepository inventoryRepository, StreamBridge streamBridge) {
         this.inventoryRepository = inventoryRepository;
+        this.streamBridge = streamBridge;
     }
 
     // Convert Inventory entity to InventoryDTO
@@ -73,7 +73,7 @@ public class InventoryService {
         inventoryRepository.save(inventory);
 
         StockEvent event = new StockEvent(productId, quantityChange);
-        kafkaTemplate.send("stock-events-topic", event);
+        streamBridge.send("stock-events-topic", event);
         return true;
     }
 

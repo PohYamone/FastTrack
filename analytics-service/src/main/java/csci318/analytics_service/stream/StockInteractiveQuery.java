@@ -1,4 +1,4 @@
-package csci318.inventory_service.Service;
+package csci318.analytics_service.stream;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -11,12 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.binder.kafka.streams.InteractiveQueryService;
 import org.springframework.stereotype.Service;
 
-import csci318.inventory_service.Model.StockItem;
-import csci318.inventory_service.stream.StockStreamProcessor;
-
-
-
-
+import csci318.analytics_service.model.StockItem;
 
 
 @Service

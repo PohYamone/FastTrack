@@ -4,6 +4,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "AnalyticsServiceApplication",
+            "request": "launch",
+            "mainClass": "csci318.analytics_service.AnalyticsServiceApplication",
+            "projectName": "analytics-service"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
@@ -38,9 +45,9 @@
         },
         {
             "type": "java",
-            "name": "AnalyicsServiceApplication",
+            "name": "AnalyticsServiceApplication",
             "request": "launch",
-            "mainClass": "csci318.analytics_service.AnalyicsServiceApplication",
+            "mainClass": "csci318.analytics_service.AnalyticsServiceApplication",
             "projectName": "analytics-service"
         },
         {
@@ -63,7 +70,7 @@
             "request": "launch",
             "mainClass": "csci318.shipping_service.ShippingServiceApplication",
             "projectName": "shipping-service"
-        },
+        }
     ],
     "compounds": [
         {
@@ -73,7 +80,7 @@
                 "ProductServiceApplication",
                 "UserApplication",
                 "InventoryServiceApplication",
-                "AnalyicsServiceApplication",
+                "AnalyticsServiceApplication",
                 "OrderServiceApplication",
                 "PaymentServiceApplication",
                 "ShippingServiceApplication"

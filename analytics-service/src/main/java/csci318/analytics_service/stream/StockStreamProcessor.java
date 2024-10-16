@@ -1,4 +1,4 @@
-package csci318.inventory_service.stream;
+package csci318.analytics_service.stream;
 
 import java.util.function.Consumer;
 
@@ -14,13 +14,12 @@ import org.apache.kafka.streams.state.KeyValueStore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import csci318.inventory_service.Model.Event.StockEvent;
-
+import csci318.analytics_service.model.event.StockEvent;
 
 @Configuration
 public class StockStreamProcessor {
 
-    public static final String TOTAL_STOCK = "totalStock";
+    public static final String TOTAL_STOCK = "total_a_Stocks";
     private static final int LOW_STOCK_THRESHOLD = 5;
     
     @Bean
