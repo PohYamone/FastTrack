@@ -19,10 +19,10 @@ import csci318.analytics_service.model.event.OrderEventType;
 @Configuration
 public class UserOrderStreamProcessor {
 
-    public static final String ACTIVE_ORDERS = "activeOrders";
+    public static final String ACTIVE_ORDERS = "activeOrderss";
 
     @Bean
-    public Consumer<KStream<Long, OrderEvent>> processUserOrders() {
+    public Consumer<KStream<Long, OrderEvent>> processOrders() {
         return inputStream -> {
             KTable<Long, Long> activeOrderCount = inputStream
                 .filter((key, value) -> value.getEventType() == OrderEventType.ORDER_CREATED ||
