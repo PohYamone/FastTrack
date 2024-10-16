@@ -4,6 +4,8 @@ import java.text.NumberFormat.Style;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import java.util.List;
+
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -24,7 +26,6 @@ public class ShippingService {
     private final ApplicationEventPublisher applicationEventPublisher;
     private final RestTemplate restTemplate;
 
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     public ShippingService(ShippingRepository shippingRepository, ShippingEventPublisher shippingEventPublisher, ApplicationEventPublisher applicationEventPublisher, RestTemplate restTemplate) {
         this.shippingRepository = shippingRepository;
@@ -51,8 +52,11 @@ public class ShippingService {
         Shipping s = convertShipping(paymentEvent);
         shippingRepository.save(s);
 
-        shippingEventPublisher.createShipmentEvent(s);
         return s;
+    }
+
+    public List<Shipping> listShipping(){
+        return shippingRepository.findAll();
     }
 
 

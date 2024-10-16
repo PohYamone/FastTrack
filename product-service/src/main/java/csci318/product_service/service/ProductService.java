@@ -2,7 +2,6 @@ package csci318.product_service.service;
 
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,9 +17,6 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
-
-    @Autowired
-    private StreamBridge streamBridge;
 
     // Constructor injection for ProductRepository.
     @Autowired

@@ -9,7 +9,6 @@ import org.apache.kafka.streams.kstream.Grouped;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Materialized;
-import org.apache.kafka.streams.kstream.Printed;
 import org.apache.kafka.streams.state.KeyValueStore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,32 +19,28 @@ import csci318.analytics_service.model.event.OrderEventType;
 @Configuration
 public class UserOrderStreamProcessor {
 
-    public static final String ACTIVE_ORDERS = "active_Orders";
+    public static final String ACTIVE_ORDERS = "activeOrders";
 
     @Bean
-    public Consumer<KStream<Long, OrderEvent>> processOrders() {
+    public Consumer<KStream<Long, OrderEvent>> processUserOrders() {
         return inputStream -> {
-
             KTable<Long, Long> activeOrderCount = inputStream
-                .filter((key, value) -> value.getEventType() == OrderEventType.ORDER_CREATED || 
-                                        value.getEventType() == OrderEventType.ORDER_SHIPPED || 
-                                        value.getEventType() == OrderEventType.ORDER_CONFIRMED) 
+                .filter((key, value) -> value.getEventType() == OrderEventType.ORDER_CREATED ||
+                                        value.getEventType() == OrderEventType.ORDER_CANCELLED ||
+                                        value.getEventType() == OrderEventType.ORDER_DELIVERED)
                 .map((key, value) -> {
-                    Long userId = value.getCustomerId(); 
-                    Long countChange = (value.getEventType() == OrderEventType.ORDER_CREATED) ? 1L : -1L; // Increment or decrement based on event type
+                    Long userId = value.getCustomerId();
+                    Long countChange = (value.getEventType() == OrderEventType.ORDER_CREATED) ? 1L : -1L;
                     return new KeyValue<>(userId, countChange);
                 })
-                .groupByKey(Grouped.with(Serdes.Long(), Serdes.Long())) // Group by userId
-                .reduce(Long::sum, // Aggregate to get the count of active orders
+                .groupByKey(Grouped.with(Serdes.Long(), Serdes.Long()))
+                .reduce(Long::sum, 
                         Materialized.<Long, Long, KeyValueStore<Bytes, byte[]>>as(ACTIVE_ORDERS)
                         .withKeySerde(Serdes.Long()).withValueSerde(Serdes.Long()));
 
-            // Output the current active order counts
             activeOrderCount.toStream().foreach((userId, orderCount) -> {
                 System.out.println("User ID: " + userId + " has " + orderCount + " active orders.");
             });
-
-            activeOrderCount.toStream().print(Printed.<Long, Long>toSysOut().withLabel("Active Orders Count"));
         };
     }
 }
