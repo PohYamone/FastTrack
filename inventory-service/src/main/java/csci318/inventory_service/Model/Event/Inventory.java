@@ -29,6 +29,11 @@ public class Inventory {
         this.availableStock = availableStock;
     }
 
+    public Inventory(Long productId, int availableStock) {
+        this.productId = productId;
+        this.availableStock = availableStock;
+    }
+
     public void setProductId(Long productId) {
         this.productId = productId;
     }

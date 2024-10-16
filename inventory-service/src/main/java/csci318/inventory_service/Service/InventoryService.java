@@ -4,16 +4,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import csci318.inventory_service.Model.DTO.InventoryDTO;
 import csci318.inventory_service.Model.Event.Inventory;
+import csci318.inventory_service.Model.Event.StockEvent;
 import csci318.inventory_service.Repository.InventoryRepository;
 
 @Service
 public class InventoryService {
 
     private final InventoryRepository inventoryRepository;
+
+    @Autowired
+    private KafkaTemplate<String, StockEvent> kafkaTemplate;
 
     @Autowired
     public InventoryService(InventoryRepository inventoryRepository) {
@@ -66,6 +71,9 @@ public class InventoryService {
 
         inventory.setAvailableStock(newStock);
         inventoryRepository.save(inventory);
+
+        StockEvent event = new StockEvent(productId, quantityChange);
+        kafkaTemplate.send("stock-events-topic", event);
         return true;
     }
 
