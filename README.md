@@ -1,220 +1,233 @@
-# CSCI318 Group Project Part B
 
-## Instructions to Run
+# CSCI318 Group Project Part C
 
-### Prerequisites
+## Overview
 
-To run the project, ensure the following components are installed on your machine:
+This project is an e-commerce platform developed using a microservices architecture. The system consists of various services (Order, Payment, Shipping, Inventory, Analytics) built using **Spring Boot**, and they communicate asynchronously through **Apache Kafka**. The project aims to provide a scalable and flexible platform capable of handling real-time operations, including order management, stock tracking, payment processing, and shipping updates.
 
-- **JDK (Java Development Kit)**: Ensure that JDK 21 is installed. Verify it by running:
-  ```console
+## Prerequisites
+
+Before running the project, ensure you have the following components installed:
+
+- **JDK 21**: You can verify the installation by running:
+  ```bash
   java --version
   ```
-- **Maven**: Maven should be installed to manage dependencies and build the project. Verify it by running:
-  ```console
+- **Maven**: Maven is used for building the project and managing dependencies. Verify it with:
+  ```bash
   mvn --version
   ```
-- **IDE**: You can use any Java IDE such as Visual Studio Code, IntelliJ IDEA, or Eclipse. The instructions below are demonstrated with Visual Studio Code.
+- **Apache Kafka**: Ensure Apache Kafka is installed and running for real-time messaging.
+  
+- **IDE**: Use any Java IDE such as **Visual Studio Code**, **IntelliJ IDEA**, or **Eclipse**. The following instructions use Visual Studio Code as an example.
 
-### Method 1: VSCode (using `launch.json`)
+## Running the Application
 
-#### Steps
+### Method 1: Using Visual Studio Code
 
 1. **Clone the Project**:  
-   Clone the project from the GitHub repository.
+   Clone the project repository to your local machine.
+
 2. **Open the Project in VSCode**:  
-   Open the downloaded folder in Visual Studio Code.
+   Navigate to the project folder and open it in Visual Studio Code.
 
 3. **Select Run and Debug**:  
-   On the left-hand side of VSCode, navigate to the **Run and Debug** tab in the sidebar.
+   On the left-hand side of VSCode, go to the **Run and Debug** tab.
 
 4. **Run All Services**:  
-   In the drop-down menu, select **Run all services** and press the play button to start all services.
+   Select the option to **Run all services** from the drop-down and click the play button.
 
 5. **Access the Application**:  
-   After starting the services, the application will run on ports `8080`, `8081`, and `8083`. You can test the RESTful endpoints using tools like `curl`, Postman, or a web browser.
-
----
+   The services will start on ports like `8080`, `8081`, and `8083`. You can access the application through these ports using `curl`, Postman, or a browser.
 
 ### Method 2: Manually Running Each Service
 
-#### Steps
-
 1. **Clone the Project**:  
-   Clone the project from the GitHub repository.
+   Clone the project repository to your local machine.
 
 2. **Open the Project in Your IDE**:  
-   Open the downloaded folder in your IDE (e.g., Visual Studio Code).
+   Open the project folder in your IDE.
 
 3. **Build the Project**:  
-   In the terminal, navigate to the root directory where the `pom.xml` file is located, and run:
-
-   ```console
+   In the terminal, navigate to the project root (where the `pom.xml` is located) and run:
+   ```bash
    mvn clean install
    ```
 
-   This command compiles the code, runs any tests, and packages the application into a JAR file.
+4. **Run Each Service**:  
+   Open separate terminals for each service and run the following commands:
 
-4. **Open Terminals for Each Service**:  
-   After a successful build, open two additional terminals and navigate to the root directory in each.
-
-5. **Run the Spring Boot Applications**:  
-   In each terminal, run the following commands to start each service:
-
-   ```console
-   mvn spring-boot:run -pl user-service
+   ```bash
+   mvn spring-boot:run -pl inventory-service
    ```
 
-   ```console
-   mvn spring-boot:run -pl product-service
+   ```bash
+   mvn spring-boot:run -pl shipping-service
    ```
 
-   ```console
+   ```bash
    mvn spring-boot:run -pl cart-service
    ```
 
-6. **Access the Application**:  
-   After starting all services, the application will be running on ports `8080`, `8081`, and `8083`. You can test the RESTful endpoints using `curl`, Postman, or a web browser.
+   ```bash
+   mvn spring-boot:run -pl user-service
+   ```
 
----
+   ```bash
+   mvn spring-boot:run -pl payment-service
+   ```
 
-### RESTful API Commands
+   ```bash
+   mvn spring-boot:run -pl order-service
+   ```
 
-#### Register Customer
+   ```bash
+   mvn spring-boot:run -pl analytics-service
+   ```
 
-| OS              | Command                                                                                                                                                                                                                                                         |
-| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **MacOS/Linux** | `curl -X POST -H "Content-Type:application/json" -d '{"name":"Poh", "email":"poh@uowmail.edu.au", "password":"password", "address": {"city":"Wollongong", "state":"NSW", "country":"Australia"}, "age":25, "gender":"female"}' http://localhost:8080/api/users` |
-| **Windows**     | `curl -X POST -H "Content-Type:application/json" -d "{"name":"Poh", "email":"poh@uowmail.edu.au", "password":"password", "address": {"city":"Wollongong", "state":"NSW", "country":"Australia"}, "age":25, "gender":"female"}" http://localhost:8080/api/users` |
+   ```bash
+   mvn spring-boot:run -pl product-service
+   ```
 
-#### Fetch All Customers
 
-| OS              | Command                                       |
-| --------------- | --------------------------------------------- |
-| **MacOS/Linux** | `curl -X GET http://localhost:8080/api/users` |
-| **Windows**     | `curl -X GET http://localhost:8080/api/users` |
+## RESTful API Requests
 
-#### Fetch Customer by ID
+### User Service
 
-| OS              | Command                                         |
-| --------------- | ----------------------------------------------- |
-| **MacOS/Linux** | `curl -X GET http://localhost:8080/api/users/1` |
-| **Windows**     | `curl -X GET http://localhost:8080/api/users/1` |
+- **Register a User**:
+  ```bash
+  curl -X POST -H "Content-Type:application/json" -d '{"name":"Poh", "email":"poh@uowmail.edu.au", "password":"password", "address": {"city":"Wollongong", "state":"NSW", "country":"Australia"}, "age":25, "gender":"female"}' http://localhost:8080/api/users
+  ```
 
-#### Login Customer
+- **Get All Users**:
+  ```bash
+  curl -X GET http://localhost:8080/api/users
+  ```
 
-| OS              | Command                                                                                                                                             |
-| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **MacOS/Linux** | `curl -X POST -H "Content-Type:application/json" -d '{ "email":"poh@uowmail.edu.au", "password":"password"}' http://localhost:8080/api/users/login` |
-| **Windows**     | `curl -X POST -H "Content-Type:application/json" -d "{ "email":"poh@uowmail.edu.au", "password":"password"}" http://localhost:8080/api/users/login` |
+- **Get User by ID**:
+  ```bash
+  curl -X GET http://localhost:8080/api/users/1
+  ```
 
-#### Create Cart for Customer
+- **User Login**:
+  ```bash
+  curl -X POST -H "Content-Type:application/json" -d '{"email":"poh@uowmail.edu.au", "password":"password"}' http://localhost:8080/api/users/login
+  ```
 
-| OS              | Command                                                |
-| --------------- | ------------------------------------------------------ |
-| **MacOS/Linux** | `curl -X POST http://localhost:8080/api/users/1/carts` |
-| **Windows**     | `curl -X POST http://localhost:8080/api/users/1/carts` |
+### Product Service
 
-#### Fetch Customer’s Carts
+- **Create a Product**:
+  ```bash
+  curl -X POST -H "Content-Type:application/json" -d '{"name":"XPS", "category":"Laptop", "price":1999, "weight":0.8}' http://localhost:8081/api/products
+  ```
 
-| OS              | Command                                               |
-| --------------- | ----------------------------------------------------- |
-| **MacOS/Linux** | `curl -X GET http://localhost:8080/api/users/1/carts` |
-| **Windows**     | `curl -X GET http://localhost:8080/api/users/1/carts` |
+- **Get All Products**:
+  ```bash
+  curl -X GET http://localhost:8081/api/products
+  ```
 
-#### Add Product to Cart
+- **Get Product by ID**:
+  ```bash
+  curl -X GET http://localhost:8081/api/products/3
+  ```
 
-| OS              | Command                                                                                                                                 |
-| --------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| **MacOS/Linux** | `curl -X PUT -H "Content-Type:application/json" -d '{ "productId":1, "quantity":5}' http://localhost:8080/api/users/1/carts/1/products` |
-| **Windows**     | `curl -X PUT -H "Content-Type:application/json" -d "{ "productId":1, "quantity":5}" http://localhost:8080/api/users/1/carts/1/products` |
+### Cart Service
 
-#### Fetch Cart by ID
+- **Create a Cart for a User**:
+  ```bash
+  curl -X POST http://localhost:8083/api/carts/user/1
+  ```
 
-| OS              | Command                                                 |
-| --------------- | ------------------------------------------------------- |
-| **MacOS/Linux** | `curl -X GET http://localhost:8080/api/users/1/carts/1` |
-| **Windows**     | `curl -X GET http://localhost:8080/api/users/1/carts/1` |
+- **Get All Carts for a User**:
+  ```bash
+  curl -X GET http://localhost:8083/api/carts/user/1
+  ```
 
-#### Fetch Products in Cart
+- **Add Product to a Cart**:
+  ```bash
+  curl -X PUT -H "Content-Type:application/json" -d '{"productId":1, "quantity":5}' http://localhost:8083/api/carts/1/products
+  ```
 
-| OS              | Command                                                          |
-| --------------- | ---------------------------------------------------------------- |
-| **MacOS/Linux** | `curl -X GET http://localhost:8080/api/users/1/carts/1/products` |
-| **Windows**     | `curl -X GET http://localhost:8080/api/users/1/carts/1/products` |
+- **Remove Product from Cart**:
+  ```bash
+  curl -X DELETE http://localhost:8083/api/carts/1/products/1
+  ```
 
-#### Remove Product from Cart
+### Order Service
 
-| OS              | Command                                                               |
-| --------------- | --------------------------------------------------------------------- |
-| **MacOS/Linux** | `curl -X DELETE http://localhost:8080/api/users/1/carts/1/products/1` |
-| **Windows**     | `curl -X DELETE http://localhost:8080/api/users/1/carts/1/products/1` |
+- **Create an Order**:
+  ```bash
+  curl -X POST -H "Content-Type:application/json" http://localhost:9090/api/orders/1
+  ```
 
-#### Create a Product
+- **Get All Orders**:
+  ```bash
+  curl -X GET http://localhost:9090/api/orders
+  ```
 
-| OS              | Command                                                                                                                                                   |
-| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **MacOS/Linux** | `curl -X POST -H "Content-Type:application/json" -d '{"name":"XPS", "category":"Laptop", "price":1999, "weight":0.8}' http://localhost:8081/api/products` |
-| **Windows**     | `curl -X POST -H "Content-Type:application/json" -d '{"name":"XPS", "category":"Laptop", "price":1999, "weight":0.8}' http://localhost:8081/api/products` |
+- **Get Order by ID**:
+  ```bash
+  curl -X GET http://localhost:9090/api/orders/1
+  ```
 
-#### Fetch all products
+### Payment Service
 
-| OS              | Command                                          |
-| --------------- | ------------------------------------------------ |
-| **MacOS/Linux** | `curl -X GET http://localhost:8081/api/products` |
-| **Windows**     | `curl -X GET http://localhost:8081/api/products` |
+- **Create a Payment**:
+  ```bash
+  curl -X POST -H "Content-Type:application/json" -d '{"orderId": 1, "customerId": 1, "amount": 100}' http://localhost:8087/api/payments
+  ```
 
-#### Fetch a Product by ID
+- **Get Payment for an Order**:
+  ```bash
+  curl -X GET http://localhost:8087/api/payments/orders/1
+  ```
 
-| OS              | Command                                            |
-| --------------- | -------------------------------------------------- |
-| **MacOS/Linux** | `curl -X GET http://localhost:8081/api/products/3` |
-| **Windows**     | `curl -X GET http://localhost:8081/api/products/3` |
+### Shipping Service
 
-#### Create Cart (through Cart Service)
+- **Update Shipping**:
+  ```bash
+  curl -X PATCH "http://localhost:8089/api/shipping/1/update"
+  ```
 
-| OS              | Command                                               |
-| --------------- | ----------------------------------------------------- |
-| **MacOS/Linux** | `curl -X POST http://localhost:8083/api/carts/user/1` |
-| **Windows**     | `curl -X POST http://localhost:8083/api/carts/user/1` |
+- **Get All Shipments**:
+  ```bash
+  curl -X GET "http://localhost:8089/api/shipping"
+  ```
 
-#### Fetch all Carts for a Customer (through Cart Service)
+### Analytics Service
 
-| OS              | Command                                              |
-| --------------- | ---------------------------------------------------- |
-| **MacOS/Linux** | `curl -X GET http://localhost:8083/api/carts/user/1` |
-| **Windows**     | `curl -X GET http://localhost:8083/api/carts/user/1` |
+- **Get All Active Orders**:
+  ```bash
+  curl -X GET "http://localhost:8096/orders/active"
+  ```
 
-#### Fetch a Cart by ID
+- **Get Active Order Count for a User**:
+  ```bash
+  curl -X GET "http://localhost:8096/orders/active/1"
+  ```
 
-| OS              | Command                                         |
-| --------------- | ----------------------------------------------- |
-| **MacOS/Linux** | `curl -X GET http://localhost:8083/api/carts/1` |
-| **Windows**     | `curl -X GET http://localhost:8083/api/carts/1` |
+- **Get All Stock Levels**:
+  ```bash
+  curl -X GET "http://localhost:8096/stock/levels"
+  ```
 
-#### Fetch all Products in a Cart (through Cart Service)
+- **Get Stock Level for a Product**:
+  ```bash
+  curl -X GET "http://localhost:8096/stock/levels/1"
+  ```
 
-| OS              | Command                                                  |
-| --------------- | -------------------------------------------------------- |
-| **MacOS/Linux** | `curl -X GET http://localhost:8083/api/carts/1/products` |
-| **Windows**     | `curl -X GET http://localhost:8083/api/carts/1/products` |
+## Real-Time Analysis with Kafka Streams
 
-#### Add Product to Cart (through Cart Service)
+The system uses **Kafka Streams API** to implement real-time stream processing for critical operations such as:
 
-| OS              | Command                                                                                                                            |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| **MacOS/Linux** | `curl -X PUT -H "Content-Type: application/json" -d '{"productId":1,"quantity":5}' http://localhost:8083/api/carts/1/products`     |
-| **Windows**     | `curl -X PUT -H "Content-Type: application/json" -d '{\"productId\":1,\"quantity\":5}' http://localhost:8083/api/carts/1/products` |
+1. **Real-Time Stock Level Tracking**:  
+   Monitors stock levels and triggers alerts when stock falls below 5.
 
-#### Delete Product from Cart (through Cart Service)
+2. **Real-Time Order Tracking**:  
+   Tracks orders in real-time and classifies them as active or inactive based on status.
 
-| OS              | Command                                                       |
-| --------------- | ------------------------------------------------------------- |
-| **MacOS/Linux** | `curl -X DELETE http://localhost:8083/api/carts/1/products/1` |
-| **Windows**     | `curl -X DELETE http://localhost:8083/api/carts/1/products/1` |
+By leveraging Kafka Streams, the platform provides immediate feedback and processing for stock and order data.
 
----
+## Conclusion
 
-### Conclusion
-
-Follow these steps and commands to run our CSCI318 Group Project Part B and interact with the services via the provided RESTful endpoints. You can use tools like `curl`, Postman, or a web browser to test and verify the services.
+This README provides instructions to set up, run, and test the microservices for our e-commerce platform. Follow the provided `curl` commands to interact with each microservice and explore the platform’s functionality.
