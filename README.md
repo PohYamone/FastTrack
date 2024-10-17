@@ -17,8 +17,40 @@ Before running the project, ensure you have the following components installed:
   ```bash
   mvn --version
   ```
-- **Apache Kafka**: Ensure Apache Kafka is installed and running for real-time messaging.
-  
+
+## Apache Kafka Setup
+This Spring Boot project uses Apache Kafka as a messaging platform.
+To run this project, you need to set up Kafka first.
+
+#### Linux and MacOS
+Download a **binary package** of Apache Kafka (e.g., `kafka_2.13-3.7.0.tgz`) from
+[https://kafka.apache.org/downloads](https://kafka.apache.org/downloads)
+and upzip it.
+In the Terminal, `cd` to the unzip folder, and start Kakfa with the following commands (each in a separate Terminal session):
+```bash
+./bin/zookeeper-server-start.sh ./config/zookeeper.properties
+```
+```bash
+./bin/kafka-server-start.sh ./config/server.properties
+```
+
+#### Windows
+Download a **binary package** of Apache Kafka (e.g., `kafka_2.13-3.7.0.tgz`) from
+[https://kafka.apache.org/downloads](https://kafka.apache.org/downloads)
+and unzip it to a directory, e.g., `C:\kafka`&mdash;Windows does not like a complex path name (!).
+
+<!--
+In the configuration file `C:\kafka\config\zookeeper.properties`, comment out the line `"dataDir=/tmp/zookeeper"`. In `C:\kafka\config\server.properties`, change the line `"log.dirs=/tmp/kafka-logs"` to `"log.dirs=.kafka-logs"`.
+-->
+
+Use the following two commands in the Windows CMD (one in each window) to start Kafka:
+```bash
+C:\kafka\bin\windows\zookeeper-server-start.bat C:\kafka\config\zookeeper.properties
+```
+```bash
+C:\kafka\bin\windows\kafka-server-start.bat C:\kafka\config\server.properties
+```
+
 - **IDE**: Use any Java IDE such as **Visual Studio Code**, **IntelliJ IDEA**, or **Eclipse**. The following instructions use Visual Studio Code as an example.
 
 ## Running the Application
