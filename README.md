@@ -37,8 +37,6 @@ Before running the project, ensure you have the following components installed:
 4. **Run All Services**:  
    Select the option to **Run all services** from the drop-down and click the play button.
 
-5. **Access the Application**:  
-   The services will start on ports like `8080`, `8081`, and `8083`. You can access the application through these ports using `curl`, Postman, or a browser.
 
 ### Method 2: Manually Running Each Service
 
