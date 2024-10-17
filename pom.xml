@@ -17,6 +17,7 @@
         <module>order-service</module>
         <module>analytics-service</module>
         <module>payment-service</module>
+        <module>demoClient</module>
         
     </modules>
 

@@ -19,7 +19,7 @@ import csci318.analytics_service.model.event.StockEvent;
 @Configuration
 public class StockStreamProcessor {
 
-    public static final String TOTAL_STOCK = "total_a_Stockss";
+    public static final String TOTAL_STOCK = "total_a_Stockssssss";
     private static final int LOW_STOCK_THRESHOLD = 5;
     
     @Bean

@@ -19,7 +19,7 @@ import csci318.analytics_service.model.event.OrderEventType;
 @Configuration
 public class UserOrderStreamProcessor {
 
-    public static final String ACTIVE_ORDERS = "activeOrderss";
+    public static final String ACTIVE_ORDERS = "active-Orders";
 
     @Bean
     public Consumer<KStream<Long, OrderEvent>> processOrders() {
