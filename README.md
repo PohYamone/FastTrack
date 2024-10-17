@@ -260,4 +260,4 @@ By leveraging Kafka Streams, the platform provides immediate feedback and proces
 
 ## Conclusion
 
-This README provides instructions to set up, run, and test the microservices for our e-commerce platform. Follow the provided `curl` commands to interact with each microservice and explore the platform’s functionality.
+This README provides instructions to set up, run, and test the microservices for our e-commerce platform. Follow the provided `curl` commands to interact with each microservice.
